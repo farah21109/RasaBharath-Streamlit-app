@@ -4,40 +4,43 @@ import os
 
 st.set_page_config(page_title="RasaBharat", layout="wide")
 
-# Famous Telangana recipes
+st.title("🌾 RasaBharat – Telangana Food Culture")
+
+# --- Load images from your repo folder ---
 famous_recipes = [
     {
-        "name_en": "Hyderabadi Biryani",
-        "name_te": "హైదరాబాది బిర్యాని",
-        "desc": "The world-famous biryani with rich spices and basmati rice.",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/6/62/Hyderabadi_Biryani.jpg"
+        "name_en": "Garela Pulusu",
+        "name_te": "గరెల పులుసు",
+        "desc": "చేపట్టిన గరెలతో చేసిన రుచికరమైన పులుసు వంటకం.",
+        "img": "images/Garela-Pulusu.jpg"
     },
     {
-        "name_en": "Sarva Pindi",
-        "name_te": "సర్వ పిండి",
-        "desc": "A traditional savory pancake made with rice flour and spices.",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Sarva_Pindi.jpg"
+        "name_en": "Kudumulu",
+        "name_te": "కుడుములు",
+        "desc": "వినాయక చవితి సందర్భంగా తయారు చేసే ప్రసిద్ధ నైవేద్యం.",
+        "img": "images/Kudumulu.jpg"
     },
     {
-        "name_en": "Sakinalu",
-        "name_te": "సాకినాలు",
-        "desc": "A crunchy snack prepared during Sankranti festival.",
-        "img": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Sakinalu.jpg"
+        "name_en": "Menthi Aaku Pesaru Pappu Koora",
+        "name_te": "మెంతి ఆకులు పెసర పప్పు కూర",
+        "desc": "ఆరోగ్యకరమైన మరియు రుచికరమైన ఆకుకూర వంటకం.",
+        "img": "images/Menthi-Aaku-Pesaru-Pappu-Koora.jpg"
     }
 ]
 
-st.title("🌾 RasaBharat – Telangana Food Culture")
-
-# Showcase Telangana recipes
-st.subheader("✨ Famous Telangana Recipes")
+# --- Famous Recipes Section ---
+st.subheader("✨ Telangana Traditional Recipes")
 cols = st.columns(len(famous_recipes))
 for col, recipe in zip(cols, famous_recipes):
     with col:
-        st.image(recipe["img"], caption=recipe["name_en"], use_column_width=True)
+        if os.path.exists(recipe["img"]):
+            st.image(recipe["img"], caption=recipe["name_en"], use_column_width=True)
+        else:
+            st.warning(f"Image not found: {recipe['img']}")
         st.markdown(f"**{recipe['name_en']} ({recipe['name_te']})**")
         st.caption(recipe["desc"])
 
-# Community Recipes Section
+# --- Community Recipes Section ---
 st.subheader("👩‍🍳 Community Recipes")
 recipes_file = "recipes.csv"
 
