@@ -1,117 +1,37 @@
 import streamlit as st
+import pandas as pd
+import os
 
-# Page Config
-st.set_page_config(page_title="RasaBharath - Telangana Food", layout="wide")
+st.set_page_config(page_title="RasaBharat", page_icon="🍲", layout="wide")
 
-# --- Custom CSS for Beautiful UI ---
-st.markdown("""
-    <style>
-    body {
-        color: black; /* default text color */
-    }
-    .title {
-        font-size: 40px; 
-        font-weight: bold; 
-        color: #2e7d32; /* dark green */
-        text-align: center;
-    }
-    .subtitle {
-        font-size: 24px; 
-        color: #1b5e20; /* green */
-        margin-top: 20px;
-        font-weight: bold;
-    }
-    .card {
-        background-color: #e8f5e9; /* light green background */
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-        color: black; /* text inside card */
-    }
-    </style>
-""", unsafe_allow_html=True)
+st.title("🍲 RasaBharat – భారతీయ వంటకాల వారసత్వం")
 
-# Title
-st.markdown('<div class="title">🍲 రసభారత్ - తెలంగాణ వంటకాలు 🍲</div>', unsafe_allow_html=True)
+# Recipe submission form
+with st.form("recipe_form"):
+    name = st.text_input("వంటకం పేరు (Dish Name)")
+    ingredients = st.text_area("పదార్థాలు (Ingredients)")
+    steps = st.text_area("తయారీ విధానం (Preparation Steps)")
+    language = st.selectbox("భాష (Language)", ["Telugu", "Hindi", "English", "Other"])
+    contributor = st.text_input("మీ పేరు (Your Name)")
+    submitted = st.form_submit_button("సమర్పించండి (Submit Recipe)")
 
-# Introduction
-st.markdown("""
-<div class="card">
-    <h3>🌟 తెలంగాణ ఆహార సంస్కృతి 🌟</h3>
-    తెలంగాణ వంటకాలు మసాలా రుచులతో ప్రసిద్ధి చెందాయి.  
-    ఇక్కడి వంటల్లో **మిర్చి, పులుపు, రాగులు, జొన్నలు** ముఖ్యపాత్ర పోషిస్తాయి.  
-</div>
-""", unsafe_allow_html=True)
-
-# Popular foods
-st.markdown('<div class="subtitle">🍛 ప్రసిద్ధ వంటకాలు</div>', unsafe_allow_html=True)
-
-foods = {
-    "జొన్న రొట్టె": {
-        "desc": "జొన్న పిండి తో చేసే రొట్టె – గోంగూర పచ్చడి తో తింటారు.",
-        "img": "images/jonna_roti.jpg"
-    },
-    "రాగి జావ": {
-        "desc": "ఆరోగ్యకరమైన పానీయం, వేసవిలో శరీరాన్ని చల్లగా ఉంచుతుంది.",
-        "img": "images/ragi_java.jpg"
-    },
-    "సరపప్పు పప్పు": {
-        "desc": "సరపప్పుతో చేసే పప్పు – రోటీ లేదా అన్నంతో రుచిగా ఉంటుంది.",
-        "img": "images/sarapappu.jpg"
-    },
-    "బజ్జీలు": {
-        "desc": "ఉల్లిపాయ, మిరపకాయ లేదా అరటికాయతో వేసే బజ్జీలు.",
-        "img": "images/bajji.jpg"
-    },
-    "సాకినేలు": {
-        "desc": "పండుగల సమయంలో చేసే ప్రత్యేక వంటకం.",
-        "img": "images/sakinalu.jpg"
-    }
-}
-
-for food, details in foods.items():
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        try:
-            st.image(details["img"], caption=food, width=200)
-        except:
-            st.warning(f"⚠️ చిత్రం {food} కి కనబడలేదు. దయచేసి 'images/' ఫోల్డర్ చెక్ చేయండి.")
-    with col2:
-        st.markdown(f"<div class='card'><h4>🍴 {food}</h4><p>{details['desc']}</p></div>", unsafe_allow_html=True)
-
-# Add Recipe Section
-st.markdown('<div class="subtitle">👩‍🍳 మీ వంటకం జోడించండి</div>', unsafe_allow_html=True)
-
-if "recipes" not in st.session_state:
-    st.session_state["recipes"] = []
-
-new_recipe = st.text_input("వంటకం పేరు:")
-new_desc = st.text_area("వంటకం వివరణ:")
-
-if st.button("వంటకం జోడించండి"):
-    if new_recipe and new_desc:
-        st.session_state["recipes"].append((new_recipe, new_desc))
-        st.success(f"✅ {new_recipe} జోడించబడింది!")
+if submitted:
+    df = pd.DataFrame([[name, ingredients, steps, language, contributor]], 
+                      columns=["Name", "Ingredients", "Steps", "Language", "Contributor"])
+    if os.path.exists("recipes.csv"):
+        df.to_csv("recipes.csv", mode="a", header=False, index=False)
     else:
-        st.error("దయచేసి వంటకం పేరు మరియు వివరణ ఇవ్వండి.")
+        df.to_csv("recipes.csv", index=False)
+    st.success("✅ వంటకం విజయవంతంగా జోడించబడింది!")
 
-if st.session_state["recipes"]:
-    for r_name, r_desc in st.session_state["recipes"]:
-        st.markdown(f"<div class='card'><b>🍴 {r_name}</b><br>{r_desc}</div>", unsafe_allow_html=True)
-
-# Extra Info
-st.markdown('<div class="subtitle">🎉 ఆహార సంస్కృతి & పండుగలు</div>', unsafe_allow_html=True)
-
-st.markdown("""
-<div class="card">
-- **బతుకమ్మ** సమయంలో ప్రత్యేక వంటకాలు చేస్తారు.  
-- **సంక్రాంతి** సందర్భంగా అరిసెలు, సాకినేలు చేస్తారు.  
-- గోంగూర పచ్చడి, మిరపకాయ పచ్చడి రోజువారీ ఆహారంలో భాగం.  
-- **మజ్జిగ, రాగి జావ** వేసవిలో చల్లగా ఉంచే పానీయాలు.  
-</div>
-""", unsafe_allow_html=True)
-
-# Footer
-st.markdown("---")
-st.caption("© 2025 రసభారత్ | తెలంగాణ ఆహార సంస్కృతి")
+# Browse recipes
+if os.path.exists("recipes.csv"):
+    st.subheader("📖 Recipes Collection")
+    recipes = pd.read_csv("recipes.csv")
+    for _, row in recipes.iterrows():
+        with st.container():
+            st.markdown(f"### {row['Name']} ({row['Language']})")
+            st.markdown(f"**Ingredients:** {row['Ingredients']}")
+            st.markdown(f"**Steps:** {row['Steps']}")
+            st.caption(f"👤 Contributed by {row['Contributor']}")
+            st.divider()
