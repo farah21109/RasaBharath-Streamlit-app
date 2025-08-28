@@ -6,23 +6,28 @@ st.set_page_config(page_title="RasaBharath - Telangana Food", layout="wide")
 # --- Custom CSS for Beautiful UI ---
 st.markdown("""
     <style>
+    body {
+        color: black; /* default text color */
+    }
     .title {
         font-size: 40px; 
         font-weight: bold; 
-        color: #a83232;
+        color: #2e7d32; /* dark green */
         text-align: center;
     }
     .subtitle {
         font-size: 24px; 
-        color: #444; 
+        color: #1b5e20; /* green */
         margin-top: 20px;
+        font-weight: bold;
     }
     .card {
-        background-color: #fff3e6;
+        background-color: #e8f5e9; /* light green background */
         padding: 15px;
         border-radius: 12px;
         box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
         margin-bottom: 20px;
+        color: black; /* text inside card */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -45,7 +50,7 @@ st.markdown('<div class="subtitle">🍛 ప్రసిద్ధ వంటకా
 foods = {
     "జొన్న రొట్టె": {
         "desc": "జొన్న పిండి తో చేసే రొట్టె – గోంగూర పచ్చడి తో తింటారు.",
-        "img": "images/jonna_roti.jpg"   # keep this image in images/ folder
+        "img": "images/jonna_roti.jpg"
     },
     "రాగి జావ": {
         "desc": "ఆరోగ్యకరమైన పానీయం, వేసవిలో శరీరాన్ని చల్లగా ఉంచుతుంది.",
